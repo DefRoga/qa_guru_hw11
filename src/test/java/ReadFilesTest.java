@@ -1,5 +1,7 @@
 import com.codeborne.pdftest.PDF;
 import com.codeborne.xlstest.XLS;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +14,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReadFilesTest {
 
@@ -85,5 +88,33 @@ public class ReadFilesTest {
         int rowCount = xls.excel.getSheetAt(0).getPhysicalNumberOfRows() - 1; // Получаем количество строк данных
         // Проверяем, что в файле 100 строк данных
         assertEquals(100, rowCount, "XLSX не содержит 100 строк данных");
+    }
+
+    // Валидация содержимого JSON
+    private void validateJson(InputStream stream) throws Exception {
+        ObjectMapper mapper = new ObjectMapper(); // Создаем парсер Jackson
+        JsonNode root = mapper.readTree(stream); // Парсим корневой объект JSON
+        System.out.println("Проверка JSON...");
+
+        // Проверка названия библиотеки
+        assertEquals("Центральная городская библиотека", root.get("libraryName").asText(),
+                "Название библиотеки не совпадает");
+
+        // Проверка массива книг
+        JsonNode books = root.get("books");
+        assertTrue(books.isArray(), "Поле 'books' должно быть массивом");
+        assertEquals(3, books.size(), "Ожидалось 3 книги в библиотеке");
+
+        // Проверка, что есть книга "Мастер и Маргарита" и правильный автор
+        boolean hasMaster = false;
+        for (JsonNode book : books) {
+            if ("Мастер и Маргарита".equals(book.get("title").asText())) {
+                hasMaster = true;
+                assertEquals("Михаил Булгаков", book.get("author").asText(), "Автор не совпадает");
+            }
+        }
+
+        // Проверяем, что нужная книга действительно присутствует
+        assertTrue(hasMaster, "Книга 'Мастер и Маргарита' не найдена");
     }
 }

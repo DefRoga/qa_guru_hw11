@@ -8,15 +8,16 @@ repositories {
 
 dependencies {
     testImplementation(
-                        'org.junit.jupiter:junit-jupiter:5.10.1',
-                        'com.codeborne:selenide:7.0.4',
-                        'com.fasterxml.jackson.core:jackson-core:2.18.3',
-                        'com.codeborne:pdf-test:1.9.2',
-                        'com.codeborne:xls-test:1.7.2',
-                        'com.opencsv:opencsv:5.10',
-                        'org.apache.poi:poi:5.4.1'
+            'org.junit.jupiter:junit-jupiter:5.10.1',
+            'com.codeborne:selenide:7.0.4',
+            'com.fasterxml.jackson.core:jackson-databind:2.15.2',
+            'com.codeborne:pdf-test:1.9.2',
+            'com.codeborne:xls-test:1.7.2',
+            'com.opencsv:opencsv:5.10',
+            'org.apache.poi:poi:5.4.1'
     )
 }
+
 
 test {
     useJUnitPlatform()
