@@ -74,7 +74,7 @@ public class ReadFilesTest {
         }
     }
 
-    // Валидация содержимого XLSX
+    // Валидация содержимого XLSX.
     private void validateXlsx(InputStream stream) throws Exception {
         XLS xls = new XLS(stream); // Загружаем XLSX из InputStream
         String firstCell = xls.excel.getSheetAt(0)
